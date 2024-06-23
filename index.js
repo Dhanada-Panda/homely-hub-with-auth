@@ -1,17 +1,16 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const authRoutes = require('./routes/auth');
-const donationRoutes = require('./routes/donations');
-const app = express();
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
+import App from './App';
+import { AuthProvider } from './context/AuthContext';
 
-mongoose.connect('mongodb://localhost:27017/donationsDB', { useNewUrlParser: true, useUnifiedTopology: true });
-
-app.use(cors());
-app.use(express.json());
-
-app.use('/api/auth', authRoutes);
-app.use('/api/donations', donationRoutes);
-
-const port = 5000;
-app.listen(port, () => console.log(`Server running on port ${port}`));
+ReactDOM.render(
+  <React.StrictMode>
+    <Router>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </Router>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
