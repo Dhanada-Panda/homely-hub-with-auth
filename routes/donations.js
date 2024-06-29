@@ -1,12 +1,22 @@
 const express = require('express');
+const { check, validationResult } = require('express-validator');
+const auth = require('../middleware/auth');
+const { createDonation, getDonations } = require('../controllers/donations');
+
 const router = express.Router();
-const { getUserDonations, createDonation } = require('../controllers/donations');
-const { verifyToken } = require('../middleware/auth');
 
-// Route to get user donations
-router.get('/user', verifyToken, getUserDonations);
+router.post(
+  '/',
+  [
+    auth,
+    check('material', 'Material is required').not().isEmpty(),
+    check('quantity', 'Quantity is required').not().isEmpty(),
+    check('centerId', 'Center ID is required').not().isEmpty(),
+    check('userId', 'User ID is required').not().isEmpty(),
+  ],
+  createDonation
+);
 
-// Route to create a new donation
-router.post('/', verifyToken, createDonation);
+router.get('/', auth, getDonations);
 
 module.exports = router;

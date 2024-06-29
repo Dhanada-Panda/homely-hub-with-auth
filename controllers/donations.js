@@ -1,29 +1,42 @@
+const Center = require('../models/Center');
 const Donation = require('../models/Donation');
 
 const createDonation = async (req, res) => {
-  const { material, quantity, type, centerId } = req.body;
   try {
+    const { material, quantity, centerId, userId } = req.body;
+
+    // Validation checks
+    if (!material || !quantity || !centerId || !userId) {
+      return res.status(400).json({ error: 'All fields are required.' });
+    }
+
+    // Fetch the center details
+
+    // Create the donation with the centerName
     const donation = new Donation({
       material,
       quantity,
-      type,
-      centerId,
-      userId: req.user.id, // assuming user id is stored in req.user
+      center: centerId,
+      user: userId,
     });
+
     await donation.save();
+
     res.status(201).json(donation);
   } catch (error) {
-    res.status(500).json({ message: 'Error creating donation' });
+    console.error('Error creating donation:', error);
+    res.status(500).json({ error: 'Internal server error.' });
   }
 };
 
-const getUserDonations = async (req, res) => {
+const getDonations = async (req, res) => {
   try {
-    const donations = await Donation.find({ userId: req.user.id }).populate('centerId');
-    res.status(200).json(donations);
+    const donations = await Donation.find().populate('center');
+    res.json(donations);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching donations' });
+    console.error("Error fetching donations:", error);
+    res.status(500).send("Server Error");
   }
 };
 
-module.exports = { createDonation, getUserDonations };
+module.exports = { createDonation, getDonations };

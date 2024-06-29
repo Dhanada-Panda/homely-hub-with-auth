@@ -1,18 +1,16 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/User'); // Adjust the path to your User model
 
-module.exports = async (req, res, next) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
-
-  if (!token) {
-    return res.status(401).json({ msg: 'No token, authorization denied' });
-  }
+const verifyToken = (req, res, next) => {
+  const token = req.headers['authorization'];
+  if (!token) return res.status(403).send('Access denied. No token provided.');
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Use the secret from your .env file
-    req.user = await User.findById(decoded.user.id).select('-password');
+    const decoded = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET);
+    req.user = decoded;
     next();
-  } catch (err) {
-    res.status(401).json({ msg: 'Token is not valid' });
+  } catch (error) {
+    res.status(401).send('Invalid token.');
   }
 };
+
+module.exports = verifyToken;
