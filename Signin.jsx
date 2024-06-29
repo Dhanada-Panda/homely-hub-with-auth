@@ -18,9 +18,23 @@ const Signin = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-      <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-      <button type="submit" disabled={loading}>Signin</button>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+      <button type="submit" disabled={loading}>
+        Signin
+      </button>
       {error && <p>{error}</p>}
     </form>
   );

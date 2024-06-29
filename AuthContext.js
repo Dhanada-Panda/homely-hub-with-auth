@@ -10,20 +10,24 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const login = async (email, password) => {
-    setLoading(true);
-    try {
-      const response = await axios.post('http://localhost:5000/api/auth/signin', { email, password });
-      setUser(response.data.user);
-      localStorage.setItem('token', response.data.token);
-      setError('');
-      navigate('/profile');
-    } catch (error) {
-      setError(error.response?.data?.message || 'Login failed');
-    } finally {
-      setLoading(false);
-    }
-  };
+  // AuthContext.js
+const login = async (email, password) => {
+  setLoading(true);
+  try {
+    const response = await axios.post('http://localhost:5000/api/auth/signin', { email, password });
+    setUser(response.data.user); // Ensure user data is correct
+    localStorage.setItem('token', response.data.token); // Save token to local storage
+    console.log('User data:', response.data.user); // Log user data
+    setError('');
+    navigate('/profile');
+  } catch (error) {
+    setError(error.response?.data?.message || 'Login failed');
+  } finally {
+    setLoading(false);
+  }
+};
+
+  
 
   const signup = async (name, address, email, password, phone, role) => {
     setLoading(true);
