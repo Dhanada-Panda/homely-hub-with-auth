@@ -31,12 +31,21 @@ const createDonation = async (req, res) => {
 
 const getDonations = async (req, res) => {
   try {
-    const donations = await Donation.find().populate('center');
+    const donations = await Donation.find({ user: req.user.userId }).populate('center');
     res.json(donations);
   } catch (error) {
     console.error("Error fetching donations:", error);
     res.status(500).send("Server Error");
   }
 };
-
-module.exports = { createDonation, getDonations };
+const getCenterDonations = async (req, res) => {
+  try {
+    const { centerId } = req.params;
+    const donations = await Donation.find({ center: centerId }).populate('user', 'name email');
+    res.json(donations);
+  } catch (error) {
+    console.error("Error fetching center donations:", error);
+    res.status(500).send("Server Error");
+  }
+};
+module.exports = { createDonation, getDonations, getCenterDonations };
