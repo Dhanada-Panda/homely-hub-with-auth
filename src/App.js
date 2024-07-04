@@ -11,7 +11,7 @@ function App() {
       <Route path="/" element={<Signup />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/profile" element={<Profile />} />
-      <Route path="/centers/:centerId" element={<CenterProfile />} />
+      <Route path="/centers/:Id" element={<CenterProfile />} />
       {/* Add other routes as needed */}
     </Routes>
   );

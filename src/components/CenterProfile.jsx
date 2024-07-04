@@ -1,77 +1,99 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const CenterProfile = () => {
-  const { centerId } = useParams();
-  const [center, setCenter] = useState(null);
+  const { user, logout } = useContext(AuthContext);
   const [donations, setDonations] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCenterData = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:5000/api/centers/${centerId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setCenter(response.data);
-      } catch (error) {
-        console.error('Failed to fetch center data', error);
+    if (!user) {
+      navigate('/signin'); // Redirect to sign-in page if user is not logged in
+    } else {
+      console.log('User object:', user); // Debug log
+      if (user.role === 'center') {
+        if (user._id) {
+          fetchCenterDonations(user._id);
+        } else {
+          console.error('User ID is undefined');
+        }
+      } else {
+        fetchUserDonations();
       }
-    };
+    }
+  }, [user, navigate]);
 
-    const fetchDonations = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:5000/api/donations/center/${centerId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setDonations(response.data);
-      } catch (error) {
-        console.error('Failed to fetch donations', error);
+  const fetchUserDonations = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('No token found. Please log in again.');
+        navigate('/signin');
+        return;
       }
-    };
 
-    fetchCenterData();
-    fetchDonations();
-    setLoading(false);
-  }, [centerId]);
+      const response = await axios.get('http://localhost:5000/api/donations', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setDonations(response.data);
+    } catch (error) {
+      console.error('Failed to fetch donations', error);
+      if (error.response) {
+        console.error('Error response data:', error.response.data);
+      }
+    }
+  };
 
-  if (loading) return <p>Loading...</p>;
+  const fetchCenterDonations = async (centerId) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('No token found. Please log in again.');
+        navigate('/signin');
+        return;
+      }
+
+      const response = await axios.get(`http://localhost:5000/api/donations/center/${centerId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setDonations(response.data);
+    } catch (error) {
+      console.error('Failed to fetch center donations', error);
+      if (error.response) {
+        console.error('Error response data:', error.response.data);
+      }
+    }
+  };
+
+  if (!user) return null; // Render nothing if user is not logged in
 
   return (
     <div>
-      {center && (
-        <div>
-          <h1>Profile</h1>
-          <p><strong>Name:</strong> {center.name}</p>
-          <p><strong>Email:</strong> {center.email}</p>
-          <p><strong>Phone:</strong> {center.phone}</p>
-          <p><strong>User Type:</strong> {center.userType}</p>
-        </div>
-      )}
+      <h1>Profile</h1>
+      <p>Name: {user.name}</p>
+      <p>Email: {user.email}</p>
+      <p>Phone: {user.phone}</p>
+      <p>User Type: {user.role}</p>
 
-      <h2>Details of received Donations</h2>
-      {donations.length > 0 ? (
-        <ul>
-          {donations.map((donation) => (
+      <h2>Donations</h2>
+      <ul>
+        {donations.length > 0 ? (
+          donations.map((donation) => (
             <li key={donation._id}>
-              <p><strong>Donor:</strong> {donation.user ? donation.user.name : 'Unknown Donor'}</p>
-              <p><strong>Email:</strong> {donation.user ? donation.user.email : 'No Email'}</p>
-              <p><strong>Material:</strong> {donation.material}</p>
-              <p><strong>Quantity:</strong> {donation.quantity}</p>
+              <p>Material: {donation.material}</p>
+              <p>Quantity: {donation.quantity}</p>
+              <p>Donor: {donation.user ? donation.user.name : 'Unknown Donor'}</p>
+              <p>Center: {donation.center ? donation.center.name : 'Unknown Center'}</p>
             </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No donations found for this center.</p>
-      )}
+          ))
+        ) : (
+          <p>No donations found for this user.</p>
+        )}
+      </ul>
 
-      <button onClick={() => {
-        localStorage.removeItem('token');
-        window.location.href = '/signin';
-      }}>Logout</button>
+      <button onClick={logout}>Logout</button>
     </div>
   );
 };
