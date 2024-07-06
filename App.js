@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import Signup from './components/Signup';
 import Signin from './components/Signin';
 import Profile from './components/Profile';
+import CenterProfile from './components/CenterProfile';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Route path="/" element={<Signup />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/centers/:Id" element={<CenterProfile />} />
       {/* Add other routes as needed */}
     </Routes>
   );
