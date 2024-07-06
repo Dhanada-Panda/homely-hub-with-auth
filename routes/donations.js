@@ -1,9 +1,10 @@
 const express = require('express');
 const { check } = require('express-validator');
 const auth = require('../middleware/auth');
-const Center = require('../models/Center'); // Ensure Center model is imported
+const Center = require('../models/Center');
+const User=require('../models/User');// Ensure Center model is imported
 const Donation = require('../models/Donation'); // Ensure Donation model is imported
-const { createDonation, getDonations } = require('../controllers/donations');
+const { createDonation, getDonations,getCenterDonations } = require('../controllers/donations');
 
 const router = express.Router();
 
@@ -21,21 +22,22 @@ router.post(
 
 router.get('/', auth, getDonations);
 
-router.get('/center/:centerId', auth, async (req, res) => {
-  try {
-    const centerId = req.params.centerId;
-    const center = await Center.findById(centerId);
+router.get('/center/:centerId', auth, getCenterDonations);
 
-    if (!center) {
-      return res.status(404).json({ message: 'Center not found' });
+// Fetch user profile
+router.get('/profile', auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    const donations = await Donation.find({ center: centerId }).populate('user', 'name email');
-    res.json({ center, donations });
+    res.json({ user });
   } catch (error) {
-    console.error(error);
-    res.status(500).send('Server Error');
+    console.error('Error fetching user profile:', error);
+    res.status(500).json({ message: 'Server error', error });
   }
 });
-
 module.exports = router;
