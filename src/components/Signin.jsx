@@ -1,7 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-
+import './style.css';
+import Navbar from '../navbar/navbar';
 const Signin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,7 +22,9 @@ const Signin = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div className='main-signup'>
+      <Navbar/>
+    <form onSubmit={handleSubmit} className='Signup-form'>
       <input
         type="email"
         placeholder="Email"
@@ -41,6 +44,8 @@ const Signin = () => {
       </button>
       {error && <p>{error}</p>}
     </form>
+    </div>
+
   );
 };
 

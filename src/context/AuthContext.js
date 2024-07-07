@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -44,11 +44,32 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const fetchUserProfile = async () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const response = await axios.get('http://localhost:5000/api/auth/donations', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setUser(response.data.user);
+      } catch (error) {
+        console.error('Failed to fetch user profile:', error);
+        setUser(null);
+      }
+    }
+  };
+
   const logout = () => {
     setUser(null); // Clear user state
     localStorage.removeItem('token'); // Remove token from local storage
     navigate('/'); // Redirect to home page after logout
   };
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, login, signup, logout, loading, error }}>

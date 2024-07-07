@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-
+import Navbar from '../navbar/navbar';
+import './style.css';
 const Profile = () => {
   const { user, logout } = useContext(AuthContext);
   const [material, setMaterial] = useState('');
@@ -19,8 +20,10 @@ const Profile = () => {
     if (!user) {
       navigate('/signin'); // Redirect to sign-in page if user is not logged in
     } else {
-      fetchCenters(); // Fetch centers when user is logged in
-      fetchDonations(); // Fetch donations when user is logged in
+      if (user.role === 'donor') {
+        fetchCenters(); // Fetch centers for donor
+      }
+      fetchDonations(); // Fetch donations for both roles
     }
   }, [user, navigate]);
 
@@ -42,7 +45,12 @@ const Profile = () => {
         return;
       }
 
-      const response = await axios.get('http://localhost:5000/api/donations', {
+      let url = 'http://localhost:5000/api/donations';
+      if (user.role === 'center') {
+        url = `http://localhost:5000/api/donations/center/${user.id || user._id}`;
+      }
+
+      const response = await axios.get(url, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setDonations(response.data);
@@ -100,7 +108,8 @@ const Profile = () => {
   if (!user) return null; // Render nothing if user is not logged in
 
   return (
-    <div>
+    <div className='main-signup'>
+      <Navbar/>
       <h1>Profile</h1>
       <p>Name: {user.name}</p>
       <p>Email: {user.email}</p>
@@ -164,7 +173,7 @@ const Profile = () => {
           <li key={donation._id}>
             <p>Material: {donation.material}</p>
             <p>Quantity: {donation.quantity}</p>
-            <p>Center: {donation.center ? donation.center.name : 'Unknown Center'}</p>
+            <p>Center: {donation.user ? donation.user.name : 'Unknown Center'}</p>
           </li>
         ))}
       </ul>

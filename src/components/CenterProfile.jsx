@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-
+import './style.css';
+import Navbar from '../navbar/navbar';
 const CenterProfile = () => {
   const { user, logout } = useContext(AuthContext);
   const [donations, setDonations] = useState([]);
@@ -10,15 +11,10 @@ const CenterProfile = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate('/signin'); // Redirect to sign-in page if user is not logged in
+      navigate('/signin');
     } else {
-      console.log('User object:', user); // Debug log
       if (user.role === 'center') {
-        if (user._id) {
-          fetchCenterDonations(user._id);
-        } else {
-          console.error('User ID is undefined');
-        }
+        fetchCenterDonations(user.id);
       } else {
         fetchUserDonations();
       }
@@ -29,7 +25,6 @@ const CenterProfile = () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        alert('No token found. Please log in again.');
         navigate('/signin');
         return;
       }
@@ -50,7 +45,6 @@ const CenterProfile = () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        alert('No token found. Please log in again.');
         navigate('/signin');
         return;
       }
@@ -67,10 +61,11 @@ const CenterProfile = () => {
     }
   };
 
-  if (!user) return null; // Render nothing if user is not logged in
+  if (!user) return null;
 
   return (
-    <div>
+    <div className='main-signup'>
+      <Navbar/>
       <h1>Profile</h1>
       <p>Name: {user.name}</p>
       <p>Email: {user.email}</p>
@@ -84,12 +79,12 @@ const CenterProfile = () => {
             <li key={donation._id}>
               <p>Material: {donation.material}</p>
               <p>Quantity: {donation.quantity}</p>
+              <p>Date: {new Date(donation.date).toLocaleDateString()}</p>
               <p>Donor: {donation.user ? donation.user.name : 'Unknown Donor'}</p>
-              <p>Center: {donation.center ? donation.center.name : 'Unknown Center'}</p>
             </li>
           ))
         ) : (
-          <p>No donations found for this user.</p>
+          <p>No donations found for this center.</p>
         )}
       </ul>
 

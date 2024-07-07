@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-
+import './style.css';
+import Navbar from '../navbar/navbar';
 const Signup = () => {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
@@ -16,7 +17,9 @@ const Signup = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div className='main-signup'>
+      <Navbar/>
+    <form onSubmit={handleSubmit} className='Signup-form'>
       <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
       <input type="text" placeholder="Address" value={address} onChange={(e) => setAddress(e.target.value)} required />
       <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
@@ -30,6 +33,7 @@ const Signup = () => {
       <button type="submit" disabled={loading}>Signup</button>
       {error && <p>{error}</p>}
     </form>
+    </div>
   );
 };
 

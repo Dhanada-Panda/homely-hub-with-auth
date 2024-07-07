@@ -1,0 +1,142 @@
+.contact1{
+    background: linear-gradient(180deg, #CEE5FD, #FFF);
+}
+.landing_page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+}
+.text-blk-section-head{
+    font-size: 30px;
+}
+.contact1{
+    height: 100%;
+    overflow: hidden;
+}
+.big-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+.container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.left-one, .right-one {
+    flex: 1;
+    margin: 10px;
+}
+
+.content-box {
+    padding: 20px;
+}
+
+.text-blk.section-head {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.text-blk.section-subhead {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.u-list-reset {
+    list-style: none;
+    padding: 0;
+}
+
+.p-icon {
+    margin-bottom: 10px;
+}
+
+.p-icon a {
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.p-icon a:hover {
+    color: #007BFF;
+}
+
+.icons-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 20px;
+}
+
+.share-icon {
+    margin-right: 10px;
+}
+
+.share-icon img {
+    width: 24px;
+    height: 24px;
+}
+
+.form-box {
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.contactus-head {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.input, .textinput, .submit-btn {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.input:focus, .textinput:focus {
+    outline: none;
+    border-color: #007BFF;
+}
+
+.textinput {
+    height: 100px;
+    resize: none;
+}
+
+.submit-btn {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .left-one, .right-one {
+        margin: 0 0 20px 0;
+    }
+}
