@@ -31,7 +31,7 @@ const createDonation = async (req, res) => {
 
 const getDonations = async (req, res) => {
   try {
-    const donations = await Donation.find({ user: req.user.userId }).populate('center');
+    const donations = await Donation.find({ user: req.user.userId }).populate('center', 'name address');
     res.json(donations);
   } catch (error) {
     console.error("Error fetching donations:", error);
