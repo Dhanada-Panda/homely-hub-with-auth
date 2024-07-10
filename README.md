@@ -30,21 +30,38 @@
 <h6>Edit Profile: </h6>Update your profile information.
 <h6>Manage Donations:</h6> View and handle donations made by donors.
 
-![Screenshot (94)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/1cede20b-e341-4c96-a245-bf123014216f)
 
+![Screenshot (95)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/ea74c917-83c4-4fbf-abc9-319552a98d5f)
 
 <h4>Admin</h4>
 <h6>Admin Dashboard:</h6> View all registered donors and centers.
 <h6>User Management: </h6>Delete any donor or center from the database.
 <h6>View Donations: </h6>Oversee all donation activities.
-![Screenshot (96)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/5433e5d6-297b-444d-94ed-d156c8cb33bc)
-![Screenshot (97)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/0a2e5ca5-1500-473f-8abf-e42efb07fd8f)
+
+
+![Screenshot (96)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/1355df4c-56ac-4da4-9a9e-3247bb588a15)
+
+
+![Screenshot (97)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/ba107e7a-8ee7-44c1-9949-34d04d8fae4d)
+
 <h2>General</h2>
 <h6>Home Page: </h6>Introduction to HomelyHub.
-![Screenshot (88)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/d0bcdff4-e45d-49df-9ae2-26c9f016c0b1)
+
+
+![Screenshot (88)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/1a2aa544-ad29-4d76-9c22-07f05c08a744)
+
 <h6>About Us: </h6>Information about the project and its purpose.
-![Screenshot (90)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/71283a0f-1432-4130-99ba-3b29b9f76f2d)
+
+
+![Screenshot (90)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/9dffac8f-0a8c-4997-9f89-49348fd4e19b)
+
 <h6>Contact Us: </h6>Contact details and form.
-![Screenshot (91)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/1c2e5915-5a82-49b5-992f-a0a8c49cd7e7)
+
+
+
+![Screenshot (91)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/89b7b4e7-a6ff-4a22-9c6f-a7a5b7cb25a0)
+
 <h6>User Type Selection:</h6> Choose between donor and center for sign up and sign in.
-![Screenshot (89)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/dcf7886f-5910-433a-a877-44bd9f682a63)
+
+
+![Screenshot (89)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/b48f8c9e-5bde-4a85-94fc-4a90fbe7c118)
