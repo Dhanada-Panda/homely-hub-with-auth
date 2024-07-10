@@ -1,54 +1,102 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import axios from 'axios';
+import './style.css';
+import Navbar from '../navbar/navbar';
 
-const DonationForm = ({ centers, onSubmit }) => {
-  const [material, setMaterial] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [type, setType] = useState('');
-  const [centerId, setCenterId] = useState('');
+const AdminDashboard = () => {
+  const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [data, setData] = useState([]);
+  const [dataType, setDataType] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit({ material, quantity, type, centerId });
+  const fetchData = async (type) => {
+    try {
+      let response;
+      if (type === 'donors') {
+        response = await axios.get('http://localhost:5000/api/users?role=donor');
+      } else if (type === 'centers') {
+        response = await axios.get('http://localhost:5000/api/users?role=center');
+      } else if (type === 'donations') {
+        response = await axios.get('http://localhost:5000/api/donations', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+      }
+      setData(response.data);
+      setDataType(type);
+    } catch (error) {
+      console.error(`Error fetching ${type}:`, error);
+    }
+  };
+
+  const renderData = () => {
+    if (dataType === 'donors') {
+      return (
+        <div className="dashboard-box">
+          <h2>Donors</h2>
+          <ul>
+            {data.map(donor => (
+              <li key={donor._id}>
+                <h4>Name:</h4>{donor.name}, <h4>Email:</h4>{donor.email},
+                <h4>Address:</h4>{donor.address}, <h4>Phone:</h4>{donor.phone}
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    } else if (dataType === 'centers') {
+      return (
+        <div className="dashboard-box">
+          <h2>Centers</h2>
+          <ul>
+            {data.map(center => (
+              <li key={center._id}>
+                <h4>Name:</h4>{center.name}, <h4>Email:</h4>{center.email},
+                <h4>Address:</h4>{center.address}, <h4>Phone:</h4>{center.phone}
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    } else if (dataType === 'donations') {
+      return (
+        <div className="dashboard-box">
+          <h2>Donations</h2>
+          <ul>
+            {data.map(donation => (
+              <li key={donation._id}>
+                Donor: {donation.user ? donation.user.name : 'Unknown'},
+                Center: {donation.center ? donation.center.name : 'Unknown'},
+                Material: {donation.material},
+                Quantity: {donation.quantity},
+                Date: {new Date(donation.date).toLocaleDateString()}
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+    return null;
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Material"
-        value={material}
-        onChange={(e) => setMaterial(e.target.value)}
-        required
-      />
-      <input
-        type="number"
-        placeholder="Quantity"
-        value={quantity}
-        onChange={(e) => setQuantity(e.target.value)}
-        required
-      />
-      <input
-        type="text"
-        placeholder="Type"
-        value={type}
-        onChange={(e) => setType(e.target.value)}
-        required
-      />
-      <select
-        value={centerId}
-        onChange={(e) => setCenterId(e.target.value)}
-        required
-      >
-        <option value="">Select Center</option>
-        {centers.map((center) => (
-          <option key={center._id} value={center._id}>
-            {center.name}
-          </option>
-        ))}
-      </select>
-      <button type="submit">Submit Donation</button>
-    </form>
+    <div className='main-dashboard'>
+      <Navbar />
+      <div className='dashboard-content'>
+        <h1>Welcome to the Admin Dashboard</h1>
+        <button onClick={() => fetchData('donors')}>Donors</button>
+        <button onClick={() => fetchData('centers')}>Centers</button>
+        <button onClick={() => fetchData('donations')}>Donations</button>
+        <button onClick={logout}>Logout</button>
+
+        {/* Render fetched data */}
+        {renderData()}
+      </div>
+    </div>
   );
 };
 
-export default DonationForm;
+export default AdminDashboard;

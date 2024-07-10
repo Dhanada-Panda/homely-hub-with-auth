@@ -3,7 +3,10 @@ import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../navbar/navbar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faSignOutAlt, faDonate, faPen, faPhone, faEnvelope, faUser } from '@fortawesome/free-solid-svg-icons';
 import './style.css';
+
 const Profile = () => {
   const { user, logout } = useContext(AuthContext);
   const [material, setMaterial] = useState('');
@@ -14,6 +17,10 @@ const Profile = () => {
   const [showCenters, setShowCenters] = useState(false);
   const [centers, setCenters] = useState([]);
   const [donations, setDonations] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editName, setEditName] = useState(user?.name || '');
+  const [editEmail, setEditEmail] = useState(user?.email || '');
+  const [editPhone, setEditPhone] = useState(user?.phone || '');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,7 +48,7 @@ const Profile = () => {
       const token = localStorage.getItem('token');
       if (!token) {
         alert('No token found. Please log in again.');
-        navigate('/signin');
+        navigate('/Signin');
         return;
       }
 
@@ -53,7 +60,13 @@ const Profile = () => {
       const response = await axios.get(url, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setDonations(response.data);
+
+      // Ensure donations are properly formatted with center information
+      const formattedDonations = response.data.map(donation => ({
+        ...donation,
+        center: donation.center ? donation.center.name : 'Unknown Center'
+      }));
+      setDonations(formattedDonations);
     } catch (error) {
       console.error('Failed to fetch donations', error);
       if (error.response) {
@@ -74,7 +87,7 @@ const Profile = () => {
       const token = localStorage.getItem('token');
       if (!token) {
         alert('No token found. Please log in again.');
-        navigate('/signin');
+        navigate('/Signin');
         return;
       }
 
@@ -95,10 +108,52 @@ const Profile = () => {
       );
 
       console.log('Donation successful:', response.data);
-      setDonationSuccessMessage('Donation was successful!');
+      setDonationSuccessMessage(`Donation to ${selectedCenter.name} was successful!`);
       fetchDonations(); // Refresh donations after successful submission
     } catch (error) {
       console.error('Failed to make donation', error);
+      if (error.response) {
+        console.error('Error response data:', error.response.data);
+      }
+    }
+  };
+
+  const handleCenterSelection = (center) => {
+    console.log('Selected center:', center);
+    setSelectedCenter(center);
+  };
+
+  const handleEditProfile = async (event) => {
+    event.preventDefault();
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('No token found. Please log in again.');
+        navigate('/Signin');
+        return;
+      }
+
+      const response = await axios.put(
+        `http://localhost:5000/api/users/${user.id || user._id}`,
+        {
+          name: editName,
+          email: editEmail,
+          phone: editPhone,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      console.log('Profile updated successfully:', response.data);
+      alert('Profile updated successfully');
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Failed to update profile', error);
       if (error.response) {
         console.error('Error response data:', error.response.data);
       }
@@ -109,62 +164,115 @@ const Profile = () => {
 
   return (
     <div className='main-signup'>
-      <Navbar/>
+      <Navbar />
       <h1>Profile</h1>
-      <p>Name: {user.name}</p>
-      <p>Email: {user.email}</p>
-      <p>Phone: {user.phone}</p>
+      <p><FontAwesomeIcon icon={faUser} /> Name: {user.name}</p>
+      <p><FontAwesomeIcon icon={faEnvelope} /> Email: {user.email}</p>
+      <p><FontAwesomeIcon icon={faPhone} /> Phone: {user.phone}</p>
       <p>User Type: {user.role}</p>
 
-      {user.role === 'donor' && (
+      <button
+        style={{ backgroundColor: 'lightgreen' }}
+        onClick={() => setShowDonationForm(true)}
+      >
+        <FontAwesomeIcon icon={faDonate} /> Donate
+      </button>
+
+      <button
+        style={{ backgroundColor: 'lightblue' }}
+        onClick={() => setIsEditing(true)}
+      >
+        <FontAwesomeIcon icon={faEdit} /> Edit Profile
+      </button>
+
+      {showDonationForm && (
         <>
-          <button onClick={() => setShowDonationForm(true)}>Donate</button>
-
-          {showDonationForm && (
-            <>
-              <form onSubmit={handleDonationSubmit}>
-                <input
-                  type="text"
-                  placeholder="Material"
-                  value={material}
-                  onChange={(e) => setMaterial(e.target.value)}
-                  required
-                />
-                <input
-                  type="number"
-                  placeholder="Quantity"
-                  value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
-                  required
-                />
-                <button type="button" onClick={() => setShowCenters(true)}>
-                  Show Centers
+          <form onSubmit={handleDonationSubmit}>
+            <input
+              type="text"
+              placeholder="Material"
+              value={material}
+              onChange={(e) => setMaterial(e.target.value)}
+              required
+            />
+            <input
+              type="number"
+              placeholder="Quantity"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+              required
+            />
+            <button
+              style={{ backgroundColor: 'lightcoral' }}
+              type="button"
+              onClick={() => setShowCenters(true)}
+            >
+              Show Centers
+            </button>
+            {showCenters && (
+              <ul>
+                {centers.map((center) => (
+                  <li key={center._id}>
+                    <p>Name: {center.name}</p>
+                    <p>Location: {center.address}</p>
+                    <button
+                      style={{ backgroundColor: 'lightgoldenrodyellow' }}
+                      type="button"
+                      onClick={() => handleCenterSelection(center)}
+                    >
+                      Select Center
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {selectedCenter && (
+              <div>
+                <p>Selected Center: {selectedCenter.name}</p>
+                <button
+                  style={{ backgroundColor: 'lightseagreen' }}
+                  type="submit"
+                >
+                  Submit Donation
                 </button>
-                {showCenters && (
-                  <ul>
-                    {centers.map((center) => (
-                      <li key={center._id}>
-                        <p>Name: {center.name}</p>
-                        <p>Location: {center.address}</p>
-                        <button type="button" onClick={() => setSelectedCenter(center)}>
-                          Select Center
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                {selectedCenter && (
-                  <div>
-                    <p>Selected Center: {selectedCenter.name}</p>
-                    <button type="submit">Submit Donation</button>
-                  </div>
-                )}
-              </form>
-            </>
-          )}
-
-          {donationSuccessMessage && <p>{donationSuccessMessage}</p>}
+              </div>
+            )}
+          </form>
         </>
+      )}
+
+      {donationSuccessMessage && <p>{donationSuccessMessage}</p>}
+
+      {isEditing && (
+        <form onSubmit={handleEditProfile}>
+          <input
+            type="text"
+            placeholder="Name"
+            value={editName}
+            onChange={(e) => setEditName(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={editEmail}
+            onChange={(e) => setEditEmail(e.target.value)}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Phone"
+            value={editPhone}
+            onChange={(e) => setEditPhone(e.target.value)}
+            required
+          />
+          <button
+            style={{ backgroundColor: 'lightpink' }}
+            type="submit"
+          >
+            Update Profile
+          </button>
+        </form>
       )}
 
       <h2>Donations</h2>
@@ -173,12 +281,17 @@ const Profile = () => {
           <li key={donation._id}>
             <p>Material: {donation.material}</p>
             <p>Quantity: {donation.quantity}</p>
-            <p>Center: {donation.user ? donation.user.name : 'Unknown Center'}</p>
+            <p>Center: {donation.center}</p>
           </li>
         ))}
       </ul>
 
-      <button onClick={logout}>Logout</button>
+      <button
+        style={{ backgroundColor: 'lightgray' }}
+        onClick={logout}
+      >
+        <FontAwesomeIcon icon={faSignOutAlt} /> Logout
+      </button>
     </div>
   );
 };

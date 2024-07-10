@@ -17,9 +17,11 @@ export const AuthProvider = ({ children }) => {
       setUser(response.data.user); // Set user state with response data
       localStorage.setItem('token', response.data.token); // Store token in local storage
       setError('');
-
-      // Redirect based on user role
-      if (response.data.user.role === 'donor') {
+  
+      // Check specifically for admin credentials
+      if (response.data.user.role === 'admin') {
+        navigate('/Admin'); 
+      } else if (response.data.user.role === 'donor') {
         navigate('/profile');
       } else if (response.data.user.role === 'center') {
         navigate(`/centers/${response.data.user.id || response.data.user._id}`);
@@ -30,13 +32,14 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     }
   };
+  
 
   const signup = async (name, address, email, password, phone, role) => {
     setLoading(true);
     try {
       await axios.post('http://localhost:5000/api/auth/signup', { name, address, email, password, phone, role });
       setError('');
-      navigate('/signin'); // Redirect to signin page after successful signup
+      navigate('/Signin'); // Redirect to signin page after successful signup
     } catch (error) {
       setError(error.response?.data?.error || 'Signup failed'); // Set error message from API response
     } finally {
@@ -48,7 +51,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        const response = await axios.get('http://localhost:5000/api/auth/donations', {
+        const response = await axios.get('http://localhost:5000/api/auth/profile', {
           headers: {
             Authorization: `Bearer ${token}`
           }

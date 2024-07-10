@@ -4,6 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './style.css';
 import Navbar from '../navbar/navbar';
+
 const CenterProfile = () => {
   const { user, logout } = useContext(AuthContext);
   const [donations, setDonations] = useState([]);
