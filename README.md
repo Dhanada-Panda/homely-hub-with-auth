@@ -3,25 +3,36 @@
 <h2>Features</h2>
 <h4>Donor</h4>
 <h6>Sign Up:</h6> Create a new account as a donor.
-
-
+  
 ![Screenshot (92)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/cc828588-0a19-4237-ad6c-c50a76a06456)
 
 <h6>Sign In:</h6> Log in to your donor account.
-![Screenshot (93)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/aedbe9b6-b03f-40d6-a25c-571fe5154efb)
+
+![Screenshot (93)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/249ae112-c27a-4c05-83f2-462b2e685d46)
+
 <h6>Profile Page:</h6> View your profile details and donation history.
 <h6>Edit Profile: </h6>Update your profile information.
 <h6>Make Donations:</h6> Donate items to registered centers.
-![Screenshot (94)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/4e22b41b-62e7-41d8-9856-b95da04df357)
+
+![Screenshot (94)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/e644ca50-cac9-419c-978e-d580ac28d099)
+
 <h4>Center</h4>
 <h6>Sign Up:</h6> Create a new account as a center.
-![Screenshot (92)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/28a3e174-e483-4550-a261-075d225c697a)
+
+![Screenshot (92)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/de306a82-c2b7-444e-a4f0-03abe8d223f4)
+
 <h6>Sign In:</h6> Log in to your center account.
-![Screenshot (93)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/aedbe9b6-b03f-40d6-a25c-571fe5154efb)
+
+
+![Screenshot (93)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/b31f66ba-a308-4a4f-96a3-25e8a0776970)
+
 <h6>Profile Page:</h6> View your profile details and manage donations.
 <h6>Edit Profile: </h6>Update your profile information.
 <h6>Manage Donations:</h6> View and handle donations made by donors.
-![Screenshot (95)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/05aa2ef1-12c1-4ab4-aee5-717bcb42f1dc)
+
+![Screenshot (94)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/1cede20b-e341-4c96-a245-bf123014216f)
+
+
 <h4>Admin</h4>
 <h6>Admin Dashboard:</h6> View all registered donors and centers.
 <h6>User Management: </h6>Delete any donor or center from the database.
