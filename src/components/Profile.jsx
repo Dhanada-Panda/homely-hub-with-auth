@@ -165,7 +165,7 @@ const Profile = () => {
   return (
     <div className='main-signup'>
       <Navbar />
-      <h1>Profile</h1>
+      <h1>Donor Profile</h1>
       <p><FontAwesomeIcon icon={faUser} /> Name: {user.name}</p>
       <p><FontAwesomeIcon icon={faEnvelope} /> Email: {user.email}</p>
       <p><FontAwesomeIcon icon={faPhone} /> Phone: {user.phone}</p>
