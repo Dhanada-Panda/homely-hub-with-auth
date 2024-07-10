@@ -1,10 +1,12 @@
 <h1>HomelyHub<h1>
 <p>HomelyHub is a web application designed to connect donors and centers. Donors can register, view their profile and donation history, and make donations. Centers can also register, view and edit their profile, and manage donations. Admins have the ability to manage users and oversee donations.</p>
-
 <h2>Features</h2>
 <h4>Donor</h4>
 <h6>Sign Up:</h6> Create a new account as a donor.
-![Screenshot (92)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/28a3e174-e483-4550-a261-075d225c697a)
+
+
+![Screenshot (92)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/cc828588-0a19-4237-ad6c-c50a76a06456)
+
 <h6>Sign In:</h6> Log in to your donor account.
 ![Screenshot (93)](https://github.com/Dhanada-Panda/homely-hub-with-auth/assets/130206432/aedbe9b6-b03f-40d6-a25c-571fe5154efb)
 <h6>Profile Page:</h6> View your profile details and donation history.
