@@ -48,4 +48,16 @@ const getCenterDonations = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
-module.exports = { createDonation, getDonations, getCenterDonations };
+
+
+const getAllDonations = async (req, res) => {
+  try {
+    const donations = await Donation.find();
+    res.json(donations);
+  } catch (error) {
+    console.error("Error fetching donations:", error);
+    res.status(500).send("Server Error");
+  }
+};
+
+module.exports = { createDonation, getDonations, getCenterDonations,getAllDonations };

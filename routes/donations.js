@@ -4,8 +4,8 @@ const auth = require('../middleware/auth');
 const Center = require('../models/Center');
 const User=require('../models/User');// Ensure Center model is imported
 const Donation = require('../models/Donation'); // Ensure Donation model is imported
-const { createDonation, getDonations,getCenterDonations } = require('../controllers/donations');
-
+const { createDonation, getDonations,getCenterDonations,getAllDonations } = require('../controllers/donations');
+const UserController = require('../controllers/deleteuser');
 const router = express.Router();
 
 router.post(
@@ -23,7 +23,9 @@ router.post(
 router.get('/', auth, getDonations);
 
 router.get('/center/:centerId', auth, getCenterDonations);
+router.get('/',auth,getAllDonations);
 
+router.delete('/api/users/:id', UserController.deleteUser);
 // Fetch user profile
 router.get('/profile', auth, async (req, res) => {
   try {
@@ -40,4 +42,17 @@ router.get('/profile', auth, async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 });
+
+router.get('/donations', auth, async (req, res) => {
+  try {
+    const donations = await Donation.find()
+      .populate('user', 'name email') // Adjust fields as needed
+      .populate('center', 'name address'); // Adjust fields as needed
+    res.json(donations);
+  } catch (error) {
+    console.error('Error fetching donations:', error);
+    res.status(500).send('Server Error');
+  }
+});
+
 module.exports = router;
