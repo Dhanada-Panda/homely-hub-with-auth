@@ -1,4 +1,4 @@
-HomelyHub
+<h1>HomelyHub<h1>
 HomelyHub is a web application designed to connect donors and centers. Donors can register, view their profile and donation history, and make donations. Centers can also register, view and edit their profile, and manage donations. Admins have the ability to manage users and oversee donations.
 
 Features
